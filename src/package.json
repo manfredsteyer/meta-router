@@ -1,0 +1,25 @@
+{
+  "name": "meta-router",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/repo"
+  },
+  "author": {
+    "name": "ManfredSteyer",
+    "email": "manfred.steyer@gmx.net"
+  },
+  "keywords": [
+    "angular"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/username/repo/issues"
+  },
+  "main": "meta-router.umd.js",
+  "module": "meta-router.js",
+  "jsnext:main": "meta-router.js",
+  "typings": "meta-router.d.ts",
+  "peerDependencies": {
+  }
+}
