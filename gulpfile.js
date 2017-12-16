@@ -8,6 +8,8 @@ var gulp = require('gulp'),
   runSequence = require('run-sequence'),
   inlineResources = require('./tools/gulp/inline-resources');
 
+const ts = require("gulp-typescript");
+
 const rootFolder = path.join(__dirname);
 const srcFolder = path.join(rootFolder, 'src');
 const tmpFolder = path.join(rootFolder, '.tmp');
@@ -49,6 +51,12 @@ gulp.task('inline-resources', function () {
  *    compiled modules to the /build folder.
  */
 gulp.task('ngc', function () {
+
+  // var tsProject = ts.createProject(`${tmpFolder}/tsconfig.es5.json`);
+  // var tsResult = tsProject.src().pipe(tsProject());
+
+  // return tsResult.js.pipe(gulp.dest('build'));
+
   return ngc({
     project: `${tmpFolder}/tsconfig.es5.json`
   })
@@ -59,7 +67,8 @@ gulp.task('ngc', function () {
         throw new Error('ngc compilation failed');
       }
     });
-});
+
+  });
 
 /**
  * 5. Run rollup inside the /build folder to generate our Flat ES module and place the
@@ -114,8 +123,6 @@ gulp.task('rollup:umd', function () {
       // A list of IDs of modules that should remain external to the bundle
       // See "external" in https://rollupjs.org/#core-functionality
       external: [
-        '@angular/core',
-        '@angular/common'
       ],
 
       // Format of generated bundle
@@ -187,13 +194,13 @@ gulp.task('compile', function () {
     'copy:source',
     'inline-resources',
     'ngc',
-    'rollup:fesm',
+    //'rollup:fesm',
     'rollup:umd',
     'copy:build',
     'copy:manifest',
     'copy:readme',
     'clean:build',
-    'clean:tmp',
+    // 'clean:tmp',
     function (err) {
       if (err) {
         console.log('ERROR:', err.message);

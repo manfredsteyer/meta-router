@@ -1,7 +1,8 @@
 import { Router, NavigationEnd } from '@angular/router';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { filter } from 'rxjs/operators';
-import { RoutedApp } from 'meta-router';
+import { RoutedApp } from 'meta-spa-router';
+import { ROUTED_APP } from './app.tokens';
 
 @Component({
   selector: 'app-root',
@@ -11,16 +12,17 @@ import { RoutedApp } from 'meta-router';
 export class AppComponent {
   title = 'app';
 
-  constructor(private router: Router, private routedApp: RoutedApp) {
+  constructor(
+    @Inject(ROUTED_APP) private routedApp: RoutedApp, 
+    private router: Router) {
     this.initRoutedApp();
   }
-
   
   initRoutedApp() {
     
     this.routedApp.config({ appId: 'a' });
     this.routedApp.init();
-    
+
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((e: NavigationEnd) => {
       this.routedApp.sendRoute(e.url);
     });

@@ -1,5 +1,5 @@
 {
-  "name": "meta-router",
+  "name": "meta-spa-router",
   "version": "0.1.0",
   "scripts": {
     "build": "gulp build",
@@ -47,6 +47,7 @@
     "gulp": "^3.9.1",
     "gulp-rename": "^1.2.2",
     "gulp-rollup": "^2.15.0",
+    "gulp-typescript": "^3.2.3",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
     "karma": "~1.4.1",

@@ -1,4 +1,4 @@
-var MetaRouter = require('meta-router').MetaRouter;
+var MetaRouter = require('meta-spa-router').MetaRouter;
 
 var config = [
     {
@@ -11,25 +11,25 @@ var config = [
     }
 ];
 
+window.addEventListener('load', function() { 
 
-window.onload = function() { 
-
-var router = new MetaRouter();
-router.config(config);
-router.init();
-router.preload();
+    var router = new MetaRouter();
+    router.config(config);
+    router.init();
+    router.preload();
 
 
-document.getElementById('link-a')
-        .addEventListener('click', function() { router.go('a') });
+    document.getElementById('link-a')
+            .addEventListener('click', function() { router.go('a') });
 
-document.getElementById('link-b')
-        .addEventListener('click', function() { router.go('b') });
+    document.getElementById('link-b')
+            .addEventListener('click', function() { router.go('b') });
 
-document.getElementById('link-aa')
-        .addEventListener('click', function() { router.go('a', 'a') });
+    document.getElementById('link-aa')
+            .addEventListener('click', function() { router.go('a', 'a') });
 
-        document.getElementById('link-ab')
-        .addEventListener('click', function() { router.go('a', 'b') });        
+            document.getElementById('link-ab')
+            .addEventListener('click', function() { router.go('a', 'b') });        
 
-}
+}); 
+

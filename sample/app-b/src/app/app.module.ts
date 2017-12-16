@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RoutedApp } from 'meta-router';
+import { RoutedApp } from 'meta-spa-router';
 
 import { AppComponent } from './app.component';
 

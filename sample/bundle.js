@@ -80,28 +80,29 @@ var config = [
     }
 ];
 
+window.addEventListener('load', function() { 
 
-window.onload = function() { 
-
-var router = new MetaRouter();
-router.config(config);
-router.init();
-router.preload();
+    var router = new MetaRouter();
+    router.config(config);
+    router.init();
+    router.preload();
 
 
-document.getElementById('link-a')
-        .addEventListener('click', function() { router.go('a') });
+    document.getElementById('link-a')
+            .addEventListener('click', function() { router.go('a') });
 
-document.getElementById('link-b')
-        .addEventListener('click', function() { router.go('b') });
+    document.getElementById('link-b')
+            .addEventListener('click', function() { router.go('b') });
 
-document.getElementById('link-aa')
-        .addEventListener('click', function() { router.go('a', 'a') });
+    document.getElementById('link-aa')
+            .addEventListener('click', function() { router.go('a', 'a') });
 
-        document.getElementById('link-ab')
-        .addEventListener('click', function() { router.go('a', 'b') });        
+            document.getElementById('link-ab')
+            .addEventListener('click', function() { router.go('a', 'b') });        
 
-}
+}); 
+
+
 
 /***/ }),
 /* 1 */
@@ -119,7 +120,8 @@ document.getElementById('link-aa')
 var MetaRouter = (function () {
     function MetaRouter() {
         this.additionalConfig = {
-            hashPrefix: '/'
+            hashPrefix: '/',
+            additionalHeight: 5
         };
         this.routes = new Array();
     }
@@ -193,7 +195,8 @@ var MetaRouter = (function () {
         var /** @type {?} */ iframe = document.getElementById(appPath);
         if (!iframe)
             return;
-        iframe.style.height = height + 'px';
+        var /** @type {?} */ newHight = Number(height) + this.additionalConfig.additionalHeight;
+        iframe.style.height = newHight + 'px';
     };
     /**
      * @param {?} route

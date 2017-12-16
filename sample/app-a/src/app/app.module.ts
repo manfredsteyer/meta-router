@@ -6,7 +6,11 @@ import { AppComponent } from './app.component';
 import { AComponent } from './a/a.component';
 import { BComponent } from './b/b.component';
 
-import { RoutedApp } from 'meta-router';
+// import { RoutedApp } from 'meta-spa-router';
+
+import { Linter } from 'tslint';
+import { RoutedApp } from 'meta-spa-router';
+import { ROUTED_APP } from './app.tokens';
 
 @NgModule({
   declarations: [
@@ -22,7 +26,7 @@ import { RoutedApp } from 'meta-router';
       { path: '**', redirectTo: 'a' }
     ], { useHash: true })
   ],
-  providers: [RoutedApp],
+  providers: [{ provide: ROUTED_APP, useFactory: () => new RoutedApp() }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
