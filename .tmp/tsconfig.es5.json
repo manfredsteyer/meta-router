@@ -28,6 +28,7 @@
     "./index.ts"
   ],
   "exclude": [
-    "./sample/**/*"  
+    "./sample/**/*",
+    "./sample-aux/**/*"
   ]
 }

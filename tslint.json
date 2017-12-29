@@ -8,7 +8,7 @@
       true,
       "check-space"
     ],
-    "curly": true,
+    "curly": false,
     "eofline": true,
     "forin": true,
     "indent": [
@@ -55,7 +55,6 @@
       true,
       "check-open-brace",
       "check-catch",
-      "check-else",
       "check-whitespace"
     ],
     "quotemark": [

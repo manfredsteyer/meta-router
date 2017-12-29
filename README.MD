@@ -2,13 +2,16 @@
 
 ## Features
 
-- Meta Router for creating a shell app that loads routed applications ("child apps") using iframes
+- Meta Router for creating a shell app that loads micro frontends (aka routed applications or child apps) using iframes
+- Because of the usage of iframes the micro frontends are isolated and cannot influence each other in an unplanned way. 
+- Allows using different frameworks in different versions for the loaded micro frontends.
 - iframes are created at runtime
 - Allows jumping to a specific route within a child app
 - Synchronizing child app's routes with the shell's route
 - Resizes the iframes to prevent a scrollbar within the iframe
 - Tested with Hash-based routing
-- Tested w/ Chrome, Firefox, Edge and IE 11
+- Tested w/ Chrome, Firefox, Edge and IE 11 (IE needs polyfills)
+- Allows Angular-like Aux-Routes to show several micro frontends side by side at one time
 
 ## Installation
 
@@ -117,6 +120,42 @@ The example below uses Angular and it's DI system for this task.
     npm install -g http-server
     http-server -o
 ```
+
+## Aux Routes
+
+You can use Angular-like Aux Routes that allows to load several micro frontends at the same time. To use this feature just define several outlets. You can use any id while the value ``outlet`` is used for the default route:
+
+```HTML
+<div id="outlet"></div>
+<div id="outlet2"></div>
+```
+
+After this, you can define per route for which ``outlet`` it is indented. If you skip the ``outlet`` property, the outlet with the id ``outlet`` is used:
+
+```JavaScript
+var config = [
+    {
+        path: 'a',
+        app: '/app-a/dist'
+    },
+    {
+        path: 'b',
+        app: '/app-b/dist',
+        outlet: 'outlet2'
+    }
+];
+```
+
+To load a micro frontend into those outlets, just use the ``go`` method:
+
+```JavaScript
+    router.go('a'); // loads a into (default) outlet
+    router.go('b'); // loads b into outlet2 (see above)
+```
+
+### Trying out Aux Routes
+
+Please find an example for Aux Routes in the folder ``sample-aux``. To install the dependencies and run it, you can use the commands described for the other sample above.
 
 ## Blog
 

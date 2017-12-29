@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AppA</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" type="text/css" href="index.css">
+  
+</head>
+<body>
+  
+<div>
+    <a id="link-a">Route to A (left outlet)</a> |
+    <a id="link-b">Route to B (right outlet)</a> |
+    <a id="link-aa">Jump to A within A</a> |
+    <a id="link-ab">Jump to B within A</a>
+</div>
+
+<p>&nbsp;</p>
+
+<div id="outlet">
+  <h2>Left Outlet for Microfrontend</h2>
+</div>
+<div id="outlet2">
+  <h2>Right Outlet for Microfrontend</h2>
+  <p>Initially empty ...</p>
+</div>
+
+<!--
+<script src="polyfills.js"></script>
+-->
+<script src="bundle.js"></script>
+
+</body>
+</html>

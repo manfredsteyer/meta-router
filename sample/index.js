@@ -18,7 +18,6 @@ window.addEventListener('load', function() {
     router.init();
     router.preload();
 
-
     document.getElementById('link-a')
             .addEventListener('click', function() { router.go('a') });
 

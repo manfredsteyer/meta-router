@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+var url_parser_1 = require("./url-parser");
 /**
  * MetaRouter for routing between micro frontends
  */
@@ -41,8 +42,8 @@ var MetaRouter = /** @class */ (function () {
      * @param subRoute subRoute passed to the client app
      */
     MetaRouter.prototype.go = function (path, subRoute) {
-        var route = this.routes.find(function (route) {
-            return route.path === path;
+        var route = this.routes.find(function (r) {
+            return r.path === path;
         });
         if (!route)
             throw Error('route not found: ' + route);
@@ -52,10 +53,10 @@ var MetaRouter = /** @class */ (function () {
     MetaRouter.prototype.handleMessage = function (event) {
         if (!event.data)
             return;
-        if (event.data.message == 'routed') {
+        if (event.data.message === 'routed') {
             this.setRouteInHash(event.data.appPath, event.data.route);
         }
-        else if (event.data.message == 'set-height') {
+        else if (event.data.message === 'set-height') {
             this.resizeIframe(event.data.appPath, event.data.height);
         }
     };
@@ -80,9 +81,9 @@ var MetaRouter = /** @class */ (function () {
             iframe.src = url;
             iframe.id = route.path;
             iframe.className = 'outlet-frame';
-            var outlet = this.getOutlet();
+            var outlet = this.getOutlet(route);
             if (!outlet)
-                throw new Error('outlet not found');
+                throw new Error("outlet " + outlet + " not found");
             outlet.appendChild(iframe);
         }
     };
@@ -90,7 +91,7 @@ var MetaRouter = /** @class */ (function () {
         var that = this;
         this.routes.forEach(function (route) {
             var iframe = that.getIframe(route);
-            if (iframe) {
+            if (iframe && route.outlet === routeToActivate.outlet) {
                 iframe.style['display'] = route === routeToActivate ? 'block' : 'none';
             }
         });
@@ -98,10 +99,11 @@ var MetaRouter = /** @class */ (function () {
             var activatedIframe = this.getIframe(routeToActivate);
             activatedIframe.contentWindow.postMessage({ message: 'sub-route', route: subRoute }, '*');
         }
-        this.setRouteInHash(routeToActivate.path, subRoute);
+        this.setRouteInHash(routeToActivate, subRoute);
         this.activatedRoute = routeToActivate;
     };
-    MetaRouter.prototype.setRouteInHash = function (path, subRoute) {
+    MetaRouter.prototype.setRouteInHash = function (routeToActivate, subRoute) {
+        var path = routeToActivate.path;
         if (subRoute && subRoute.startsWith('/')) {
             subRoute = subRoute.substr(1);
         }
@@ -114,11 +116,18 @@ var MetaRouter = /** @class */ (function () {
         }
         history.replaceState(null, null, document.location.pathname + '#' + hash);
     };
+    MetaRouter.prototype.parseHash = function () {
+        var hash = location.hash.substr(1) + '\0';
+        var urlParser = new url_parser_1.UrlParser();
+        var routes = urlParser.parse(hash);
+        return routes;
+    };
     MetaRouter.prototype.getIframe = function (route) {
         return document.getElementById(route.path);
     };
-    MetaRouter.prototype.getOutlet = function () {
-        return document.getElementById('outlet');
+    MetaRouter.prototype.getOutlet = function (route) {
+        var outlet = route.outlet || 'outlet';
+        return document.getElementById(outlet);
     };
     MetaRouter.prototype.routeByUrl = function () {
         if (!location.hash)
@@ -134,4 +143,3 @@ var MetaRouter = /** @class */ (function () {
     return MetaRouter;
 }());
 exports.MetaRouter = MetaRouter;
-;

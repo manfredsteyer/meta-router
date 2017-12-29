@@ -1,0 +1,20 @@
+.outlet-frame	{ 
+    width:100%; 
+    background:#FFF;
+    border:none;
+}
+
+#outlet {
+    border: dashed blue 2px; 
+    width: 40%; 
+    float: left;
+    padding: 20px;
+}
+
+#outlet2 {
+    border: dashed darkred 2px; 
+    width: 40%; 
+    float: left;
+    margin-left:20px;
+    padding: 20px;
+}

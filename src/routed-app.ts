@@ -24,7 +24,7 @@ export class RoutedApp {
       parent.postMessage({ message: 'routed', appPath: this.childConfig.appId, route: url  }, '*');
     }
 
-    /** 
+    /**
      * Registers a callback that allows the meta router to request 
      * a new route within the routed application 
     */
