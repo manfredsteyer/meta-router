@@ -20,7 +20,12 @@ export class AppComponent {
   
   initRoutedApp() {
     
-    this.routedApp.config({ appId: 'a' });
+    this.routedApp.config({ 
+      appId: 'a', 
+      handleNotification: (tag, data) => console.debug('received broadcast', {tag, data}),
+      allowedOrigins: 'same-origin'
+    });
+
     this.routedApp.init();
 
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((e: NavigationEnd) => {

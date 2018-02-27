@@ -5,11 +5,12 @@ var UrlParser = /** @class */ (function () {
     }
     UrlParser.prototype.parse = function (url) {
         var key = 'outlet';
-        var value;
+        var value = '';
         var depth = 0;
         var state = null;
         var result = {};
         state = 'value';
+        url += '\0';
         for (var i = 0; i < url.length; i++) {
             var c = url.substr(i, 1);
             var c2 = url.substr(i, 2);
@@ -34,13 +35,20 @@ var UrlParser = /** @class */ (function () {
                     else if (depth > 0) {
                         value += c;
                     }
-                    else if (c2 === '//' || c2 === '\0') {
+                    else if (c2 === '//') {
+                        result[key] = value;
+                        key = value = '';
+                        state = 'key';
+                        i++;
+                    }
+                    else if (c === '\0') {
                         result[key] = value;
                         key = value = '';
                         state = 'key';
                     }
                     else if (c === ':') {
                         key = value;
+                        value = '';
                         state = 'value';
                     }
                     else {

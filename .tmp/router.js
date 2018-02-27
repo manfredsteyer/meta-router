@@ -8,9 +8,12 @@ var MetaRouter = /** @class */ (function () {
     function MetaRouter() {
         this.additionalConfig = {
             hashPrefix: '/',
-            additionalHeight: 5
+            additionalHeight: 5,
+            handleNotification: function () { },
+            allowedOrigins: '*'
         };
         this.routes = new Array();
+        this.urlParser = new url_parser_1.UrlParser();
     }
     MetaRouter.prototype.config = function (routes) { this.routes = routes; };
     /**
@@ -53,11 +56,35 @@ var MetaRouter = /** @class */ (function () {
     MetaRouter.prototype.handleMessage = function (event) {
         if (!event.data)
             return;
+        if (this.additionalConfig.allowedOrigins === 'same-origin'
+            && event.origin !== location.origin) {
+            throw new Error('Received message from not allowed origin');
+        }
+        else if (this.additionalConfig.allowedOrigins !== '*') {
+            var whiteList = this.additionalConfig.allowedOrigins.split(';');
+            if (whiteList.indexOf(event.origin) === -1) {
+                throw new Error('Received message from not allowed origin');
+            }
+        }
         if (event.data.message === 'routed') {
-            this.setRouteInHash(event.data.appPath, event.data.route);
+            var route = this.routes.find(function (r) { return r.path === event.data.appPath; });
+            this.setRouteInHash(route, event.data.route);
         }
         else if (event.data.message === 'set-height') {
             this.resizeIframe(event.data.appPath, event.data.height);
+        }
+        else if (event.data.message === 'notification' && this.additionalConfig.handleNotification) {
+            this.additionalConfig.handleNotification(event.data.tag, event.data.data);
+        }
+        else if (event.data.message === 'broadcast') {
+            for (var _i = 0, _a = this.routes; _i < _a.length; _i++) {
+                var route = _a[_i];
+                var iframe = this.getIframe(route);
+                if (iframe) {
+                    iframe.contentWindow.postMessage({ message: 'notification', tag: event.data.tag, data: event.data.data }, '*');
+                }
+            }
+            this.additionalConfig.handleNotification(event.data.tag, event.data.data);
         }
     };
     MetaRouter.prototype.resizeIframe = function (appPath, height) {
@@ -104,6 +131,7 @@ var MetaRouter = /** @class */ (function () {
     };
     MetaRouter.prototype.setRouteInHash = function (routeToActivate, subRoute) {
         var path = routeToActivate.path;
+        var currentRoutes = this.parseHash();
         if (subRoute && subRoute.startsWith('/')) {
             subRoute = subRoute.substr(1);
         }
@@ -114,13 +142,27 @@ var MetaRouter = /** @class */ (function () {
         else {
             hash = path;
         }
-        history.replaceState(null, null, document.location.pathname + '#' + hash);
+        currentRoutes[routeToActivate.outlet || 'outlet'] = hash;
+        history.replaceState(null, null, document.location.pathname + '#' + this.persistUrl(currentRoutes));
     };
     MetaRouter.prototype.parseHash = function () {
         var hash = location.hash.substr(1) + '\0';
-        var urlParser = new url_parser_1.UrlParser();
-        var routes = urlParser.parse(hash);
-        return routes;
+        return this.urlParser.parse(hash);
+    };
+    MetaRouter.prototype.persistUrl = function (routes) {
+        var url = '';
+        if (routes['outlet']) {
+            url = routes['outlet'];
+        }
+        for (var _i = 0, _a = Object.getOwnPropertyNames(routes); _i < _a.length; _i++) {
+            var key = _a[_i];
+            if (key !== 'outlet') {
+                if (url)
+                    url += '//';
+                url += key + ':' + routes[key];
+            }
+        }
+        return url;
     };
     MetaRouter.prototype.getIframe = function (route) {
         return document.getElementById(route.path);
@@ -135,10 +177,15 @@ var MetaRouter = /** @class */ (function () {
         var path = location.hash.substr(1);
         if (!path)
             return;
-        var segments = path.split('/');
-        var appPath = segments[0];
-        var rest = segments.slice(1).join('/');
-        this.go(appPath, rest);
+        var routes = this.urlParser.parse(path);
+        for (var _i = 0, _a = Object.getOwnPropertyNames(routes); _i < _a.length; _i++) {
+            var key = _a[_i];
+            var route = routes[key];
+            var segments = route.split('/');
+            var appPath = segments[0];
+            var rest = segments.slice(1).join('/');
+            this.go(appPath, rest);
+        }
     };
     return MetaRouter;
 }());

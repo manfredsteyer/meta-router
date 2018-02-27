@@ -4,7 +4,8 @@
   "description": "- Meta Router for creating shell app that loads routed applications (\"child apps\") using iframes\r - iframes are created at runtime\r - Allows jumping to a specific route within child app\r - Synchronizing child app's routes with the shell's route\r - Resizes the iframes to prevent a scrollbar within the iframe\r - Written in VanillaJS to allow shell app to be as slim as possible\r - Tested with ``HashLocationStrategy``\r - Tested w/ Chrome, Firefox, Edge and IE 11",
   "main": "child-app.js",
   "scripts": {
-    "build": "webpack index.js bundle.js"
+    "build": "webpack index.js bundle.js",
+    "start": "webpack-dev-server index.js bundle.js"
   },
   "author": "",
   "license": "MIT",

@@ -3,13 +3,16 @@ var MetaRouter = require('meta-spa-router').MetaRouter;
 var config = [
     {
         path: 'a',
-        app: '/app-a/dist'
+        app: '/app-a/dist',
+        outlet: 'outlet'
     },
     {
         path: 'b',
-        app: '/app-b/dist'
+        app: '/app-b/dist',
+        outlet: 'outlet'
     }
 ];
+
 
 window.addEventListener('load', function() { 
 
@@ -17,6 +20,11 @@ window.addEventListener('load', function() {
     router.config(config);
     router.init();
     router.preload();
+
+    router.additionalConfig.handleNotification = function (tag, data)  {
+        console.debug('received message from routed app', {tag, data});
+    }
+
 
     document.getElementById('link-a')
             .addEventListener('click', function() { router.go('a') });
@@ -31,4 +39,3 @@ window.addEventListener('load', function() {
             .addEventListener('click', function() { router.go('a', 'b') });        
 
 }); 
-

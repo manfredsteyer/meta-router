@@ -22,7 +22,11 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent.prototype.initRoutedApp = function () {
         var _this = this;
-        this.routedApp.config({ appId: 'a' });
+        this.routedApp.config({
+            appId: 'a',
+            handleNotification: function (tag, data) { return console.debug('received broadcast', { tag: tag, data: data }); },
+            allowedOrigins: 'same-origin'
+        });
         this.routedApp.init();
         this.router.events.pipe(operators_1.filter(function (e) { return e instanceof router_1.NavigationEnd; })).subscribe(function (e) {
             _this.routedApp.sendRoute(e.url);

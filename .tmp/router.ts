@@ -12,9 +12,13 @@ export interface MetaRoute {
     outlet: string;
 }
 
+export type HandleNotification = (tag: string, data: any) => void;
+
 export interface MetaRouterConfig {
     hashPrefix: string;
     additionalHeight: number;
+    handleNotification: HandleNotification;
+    allowedOrigins: string;
 }
 
 /**
@@ -24,8 +28,9 @@ export class MetaRouter {
 
     additionalConfig: MetaRouterConfig = {
         hashPrefix: '/',
-        additionalHeight: 5
-
+        additionalHeight: 5,
+        handleNotification: () => {},
+        allowedOrigins: '*'
     };
 
     activatedRoute: MetaRoute;
@@ -49,6 +54,11 @@ export class MetaRouter {
         else {
             this.routeByUrl();
         }
+
+        if (this.additionalConfig.allowedOrigins === 'same-origin') {
+            this.additionalConfig.allowedOrigins = location.origin;
+          }
+    
     }
 
     /**
@@ -79,6 +89,17 @@ export class MetaRouter {
     private handleMessage(event: MessageEvent): void {
         if (!event.data) return;
 
+        if (this.additionalConfig.allowedOrigins === 'same-origin'
+            && event.origin !== location.origin) {
+                throw new Error('Received message from not allowed origin');
+        }
+        else if (this.additionalConfig.allowedOrigins !== '*') {
+            let whiteList = this.additionalConfig.allowedOrigins.split(';');
+            if (whiteList.indexOf(event.origin) === -1) {
+                throw new Error('Received message from not allowed origin');
+            }
+        }
+
         if (event.data.message === 'routed') {
             let route = this.routes.find(r => r.path === event.data.appPath);
             this.setRouteInHash(route, event.data.route);
@@ -86,6 +107,21 @@ export class MetaRouter {
         else if (event.data.message === 'set-height') {
             this.resizeIframe(event.data.appPath, event.data.height);
         }
+        else if (event.data.message === 'notification' && this.additionalConfig.handleNotification) {
+            this.additionalConfig.handleNotification(event.data.tag, event.data.data);
+        }
+        else if (event.data.message === 'broadcast') {
+            
+            for(let route of this.routes) {
+                let iframe = this.getIframe(route);
+                if (iframe) {
+                    iframe.contentWindow.postMessage({ message: 'notification', tag: event.data.tag, data: event.data.data  }, this.additionalConfig.allowedOrigins);
+                }
+            }
+            
+            this.additionalConfig.handleNotification(event.data.tag, event.data.data);
+        }
+
     }
 
     private resizeIframe(appPath: string, height: number): void {
@@ -131,7 +167,7 @@ export class MetaRouter {
 
         if (subRoute) {
             let activatedIframe = this.getIframe(routeToActivate) as HTMLIFrameElement;
-            activatedIframe.contentWindow.postMessage({message: 'sub-route', route: subRoute }, '*' );
+            activatedIframe.contentWindow.postMessage({message: 'sub-route', route: subRoute }, this.additionalConfig.allowedOrigins );
         }
 
         this.setRouteInHash(routeToActivate, subRoute);
