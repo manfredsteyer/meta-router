@@ -9,7 +9,9 @@
   },
   "author": "",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "meta-spa-router": "^1.0.0"
+  },
   "devDependencies": {
     "webpack": "^3.10.0"
   }
