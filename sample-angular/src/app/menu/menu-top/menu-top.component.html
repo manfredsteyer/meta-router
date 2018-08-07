@@ -1,0 +1,71 @@
+<div title="close right side" class="close-right" *ngIf="isSplitted" (click)="defautltIframes()">
+  <i class="material-icons">cancel_presentation</i>
+</div>
+
+<div class=" mdl-layout mdl-js-layout  mdl-layout--fixed-header">
+  <div class="mdl-layout__header">
+  </div>
+  <div class="mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+    <header class="drawer-header">
+      <img src="assets/logo.png" class="menu-icon" width="40px">
+      <span class="menu-title">
+        {{portalName}} 
+      </span>
+      <div class="menu-username">
+        Welcome
+        <span >{{userName}}</span>
+      </div>
+    </header>
+
+    <nav class="navigation mdl-navigation mdl-color--blue-grey-800" id="menu-container-id">
+      <ng-template ngFor let-menu [ngForOf]="menues">
+        <div *ngIf="menu.Children;then withChildren else withoutChildren">
+        </div>
+        <ng-template #withoutChildren>
+          <a (click)="onClickMenu(menu)" class="mdl-navigation__link" id="link-{{menu.Name | trim}}" href="#{{menu.Name | trim}}" [class.mdl-navigation__link-open]="cleanSpaces(menu.Name)===selected">
+            <i class="fas {{menu.Icon}} material-icons-menu {{menu.Name===selected ? 'material-icons-menu-open': ''}}"></i>
+            <span class="menu-item-title">
+              {{menu.Name}}
+            </span>
+          </a>
+        </ng-template>
+        <ng-template #withChildren>
+          <li class="menu-dropdown-container">
+            <a [class.parent-opened]="menu.Name===subSelected" [class.mdl-navigation__link-open]="cleanSpaces(menu.Name)===selected" class="mdl-navigation__link menu-parent"
+              (click)="onSelectSubMenu(menu)">
+              <i class="fas {{menu.Icon}} material-icons-menu"></i>
+              <span class="parent-menu-item-title">
+                {{menu.Name}}
+              </span>
+              <i *ngIf="menu.Name!==subSelected" class="sub-menu-icon-closed material-icons"> navigate_before </i>
+              <i *ngIf="menu.Name===subSelected" class="sub-menu-icon-opened material-icons"> keyboard_arrow_down </i>
+            </a>
+            <ul class="sub-menu" *ngIf="menu.Name===subSelected">
+              <ng-template ngFor let-child [ngForOf]="menu.Children">
+                <li>
+                  <a (click)="onClickMenu(menu, child)" class="mdl-navigation__link sub-menu-item sub-menu-open" id="link-{{child.Name | trim}}"
+                    href="#{{menu.Name | trim}}-{{child.Name | trim}}">
+                    <i class="fas {{child.Icon}} material-icons-menu"></i>
+                    <span class="sub-menu-item-title">
+                      {{child.Name}}
+                    </span>
+                  </a>
+                  <i (click)="splitIt(menu, child)" title="Split your workspace" class="sub-menu-icon-split material-icons"> call_split </i>
+                </li>
+              </ng-template>
+            </ul>
+          </li>
+        </ng-template>
+      </ng-template>
+      <div class="mdl-layout-spacer"></div>
+      <div>
+        <i class="mdl-color-text--blue-grey-400 material-icons material-icons-menu" role="presentation">help_outline</i>
+        <span class="visuallyhidden">Help</span>
+      </div>
+    </nav>
+  </div>
+  <main class="mdl-layout__content mdl-color--grey-100">
+    <div class="mdl-grid" id="outlet">
+    </div>
+  </main>
+</div>

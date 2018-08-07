@@ -1,0 +1,412 @@
+/**
+  * Vars
+  */
+
+$icon-menu-color: rgba(230, 230, 230, 0.2);
+$title-color: #ff9811;
+$warn-color: #ff7800;
+$danger-color: rgba(248, 10, 30, 0.6);
+$warn-light-color: #ffda44;
+$high-light-color: yellow;
+$inverse-warn-color: rgba(8, 29, 214, 0.54);
+$inverse-light-warn-color: rgba(25, 163, 255, 0.54);
+$bg-color-menu-selected: #141517;
+$bg-color-menu: #303642;
+$soft-text-color: rgba(255, 255, 255, 0.56);
+$success-color: rgba(38, 255, 38, 0.774);
+
+@mixin radius-gen($tl, $tp, $br, $bl) {
+  border-radius: $tl $tp $br $bl;
+  -moz-border-radius: $tl $tp $br $bl;
+  -webkit-border-radius: $tl $tp $br $bl;
+}
+
+%contend-position {
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+
+%unselectable {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+%sub-menu-position {
+  position: absolute;
+  right: 5px;
+  top: 8px;
+}
+
+::-webkit-scrollbar {
+  background-color: transparent;
+  width: 14px;
+  margin-right: 20px;
+  padding: 20px;
+  margin: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background-color: #585858;
+}
+
+/**
+  * Layout CSS
+  */
+
+/**
+  * Toggle Sidedrawer
+  */
+#outlet {
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+iframe {
+  display: block;
+  background: #000;
+  border: none;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+.outlet-frame {
+  width: 100%;
+  background: #fff;
+  border: none;
+}
+.logo {
+  width: 40px;
+  height: 40px;
+}
+.mdl-layout__content {
+  overflow: hidden;
+}
+a:focus,
+a:hover {
+  text-decoration: none;
+}
+.material-icons-menu {
+  margin-right: 8px;
+  font-size: 20px;
+  width: 30px;
+  color: $icon-menu-color;
+}
+.menu-title {
+  position: absolute;
+  top: 12px;
+  left: 150px;
+  color: $title-color;
+}
+.menu-username {
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+}
+.menu-icon {
+  position: absolute;
+  top: 12px;
+  left: 5px;
+}
+li {
+  list-style: none;
+  position: relative;
+  padding: 0px !important;
+}
+ul {
+  margin: 0px;
+  padding: 0px;
+}
+.sub-menu {
+  background-color: $bg-color-menu;
+}
+
+.sub-menu-item {
+  margin-left: 10px;
+  height: 30px;
+  padding: 5px;
+}
+.sub-menu-item-title {
+  font-weight: 400;
+}
+
+.menu-dropdown-container {
+  position: relative;
+}
+
+.sub-menu-icon-closed {
+  color: rgba(230, 230, 230, 0.2);
+  @extend %sub-menu-position;
+  @extend %unselectable;
+}
+.sub-menu-icon-opened {
+  color: $warn-color;
+  @extend %sub-menu-position;
+  @extend %unselectable;
+}
+.sub-menu-icon-split {
+  font-size: 18px !important;
+  color: transparentize(white, 0.7);
+  cursor: pointer;
+  @extend %sub-menu-position;
+  @extend %unselectable;
+}
+
+.sub-menu-icon-split:hover {
+  transform: scale(1.4, 1.4);
+  color: $warn-color;
+}
+
+.sub-menu-open {
+  background-color: transparent !important;
+  color: #fffcf2 !important;
+}
+
+.sub-menu-open:hover {
+  color: $warn-light-color !important;
+}
+
+.sub-menu-open-selected {
+  color: $warn-color !important;
+}
+
+.mdl-navigation__link-open {
+  background-color: #141517;
+  animation: change-drawer 4s linear infinite;
+  color: #fff !important;
+}
+
+.material-icons-menu-open {
+  color: white !important;
+}
+
+.mdl-navigation__link-open > .material-icons-menu {
+  color: $warn-color;
+}
+
+#user-name {
+  font-weight: bold;
+}
+
+// KeyFrames
+@keyframes change-drawer {
+  0% {
+    background: $inverse-warn-color;
+  }
+  50% {
+    background: $inverse-light-warn-color;
+  }
+  100% {
+    background: $inverse-warn-color;
+  }
+}
+
+@keyframes change-close {
+  0% {
+    background: $danger-color;
+  }
+  50% {
+    background: darken($danger-color, 20%);
+  }
+  100% {
+    background: $danger-color;
+  }
+}
+
+@keyframes change-drawer-light {
+  0% {
+    background: $inverse-light-warn-color;
+  }
+  50% {
+    background: lighten($inverse-light-warn-color, 20%);
+  }
+  100% {
+    background: $inverse-light-warn-color;
+  }
+}
+
+@keyframes change-version {
+  0% {
+    background: darken($success-color, 20%);
+  }
+  50% {
+    background: lighten($success-color, 10%);
+  }
+  100% {
+    background: darken($success-color, 20%);
+  }
+}
+
+.drawer-header {
+  position: relative;
+  box-sizing: border-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  @extend %contend-position;
+  padding: 16px;
+  height: 101px;
+}
+
+.navigation {
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+
+.navigation .mdl-navigation__link .material-icons {
+  font-size: 24px;
+}
+
+.demo-content {
+  max-width: 1080px;
+}
+
+.mdl-color--blue-grey-800 {
+  background-color: #1c222d !important;
+}
+
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
+  padding: 16px 10px;
+  margin: 0px;
+  padding: 9px;
+  padding-left: 12px;
+}
+::ng-deep .mdl-navigation__link {
+  cursor: pointer;
+  color: $soft-text-color;
+  font-weight: 500;
+}
+.menu-item-title,
+.parent-menu-item-title {
+  color: lighten($soft-text-color, 20%);
+}
+.mdl-navigation__link:hover {
+  .menu-item-title,
+  .parent-menu-item-title {
+    color: #fff !important;
+  }
+}
+
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {
+  background-color: $bg-color-menu-selected;
+  color: #fff;
+  & > .material-icons-menu {
+    color: $warn-color !important;
+  }
+}
+
+.parent-opened {
+  background-color: $bg-color-menu-selected;
+  color: #fff;
+  & > .material-icons-menu {
+    color: $warn-color;
+  }
+}
+
+.mdl-layout__header {
+  position: fixed;
+}
+
+.mdl-layout__header {
+  background: transparent !important;
+  width: 90px;
+  height: 30px;
+}
+
+::ng-deep .mdl-layout__drawer-button {
+  animation: change-drawer 4s linear infinite;
+  color: white;
+  left: 0px;
+  margin: 0px;
+  width: 40px;
+  height: 40px;
+}
+::ng-deep .mdl-layout__drawer-button:hover {
+  animation: change-drawer-light 0.7s linear infinite !important;
+}
+
+::ng-deep .mdl-layout__drawer-button {
+  @extend %unselectable;
+  @include radius-gen(0px, 20px, 20px, 0px);
+  border: 0px solid #000000;
+  transition: transform 0.2s ease-in-out, width 0.3s;
+  -webkit-transition: transform 0.2s ease-in-out, width 0.3s; /* Safari */
+  &:focus {
+    outline: 0 !important;
+  }
+}
+
+::ng-deep .mdl-layout__drawer-button[aria-expanded='false']:hover {
+  width: 60px !important;
+}
+::ng-deep .mdl-layout__drawer-button[aria-expanded='false']:hover > ::ng-deep .material-icons {
+  left: 25px;
+}
+::ng-deep .mdl-layout__drawer-button > ::ng-deep .material-icons {
+  color: #fff;
+  position: absolute;
+  left: 5px;
+  top: 8px;
+  -webkit-transition: left 0.3s; /* Safari */
+  transition: left 0.3s;
+}
+::ng-deep .mdl-layout__drawer-button[aria-expanded='true'] {
+  -ms-transform: translate(240px); /* IE 9 */
+  -webkit-transform: translate(240px); /* Safari */
+  transform: translate(240px); /* Standard syntax */
+  background-color: #263238 !important;
+}
+
+::ng-deep .mdl-layout__drawer-button[aria-expanded='true'] > ::ng-deep .material-icons {
+  color: $high-light-color;
+}
+
+.mdl-layout__header {
+  z-index: 200;
+  box-shadow: none;
+}
+
+.mdl-layout__drawer {
+  border-right: none;
+}
+
+.close-right {
+  @extend %unselectable;
+  @include radius-gen(0px, 20px, 20px, 0px);
+  border: 0px solid #000000;
+  transition: transform 0.2s ease-in-out, width 0.3s;
+  -webkit-transition: transform 0.2s ease-in-out, width 0.3s; /* Safari */
+  animation: change-close 4s linear infinite;
+  left: 0px;
+  margin: 0px;
+  width: 35px;
+  height: 30px;
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  & .material-icons {
+    color: rgba(255, 255, 255, 0.9);
+    position: absolute;
+    left: 3px;
+    top: 3px;
+  }
+  background: red;
+  z-index: 100;
+  &:hover {
+    animation: change-close 0.7s linear infinite !important;
+  }
+}
