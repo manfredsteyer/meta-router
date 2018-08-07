@@ -1,0 +1,60 @@
+/* You can add global styles to this file, and also import other style files */
+$inverse-warn-color: rgba(7, 65, 172, 0.801);
+$danger-color: rgba(248, 10, 30, 0.6);
+
+html,
+body {
+  height: 100%;
+  background-color: #fff;
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+  overflow: hidden;
+  margin: 0px;
+  padding: 0px;
+}
+
+iframe {
+  display: block;
+  background: TRANSPARENT;
+  border: none;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  margin: 0px;
+  padding: 0px;
+}
+#outlet {
+  height: 100%;
+}
+.outlet-frame {
+  width: 100%;
+  background: #fff;
+  border: none;
+}
+@keyframes change-splitted {
+  0% {
+    border-left: solid 3px $danger-color;
+  }
+  50% {
+    border-left: solid 3px lighten($danger-color, 10%);
+  }
+  100% {
+    border-left: solid 3px $danger-color;
+  }
+}
+
+.splitted-left {
+  width: 50% !important;
+  display: block !important;
+  box-sizing: border-box;
+  position: absolute;
+  left: 0px;
+}
+.splitted-right {
+  width: 50% !important;
+  display: block !important;
+  border-left: solid 5px $inverse-warn-color;
+  animation: change-splitted 3s linear infinite;
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+}
